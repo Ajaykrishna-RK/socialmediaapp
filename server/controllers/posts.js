@@ -48,6 +48,20 @@ export const getUserPosts = async (req, res) => {
   }
 };
 
+export const deletePost = async(req,res)=>{
+  try{
+const {userId} = req.params 
+
+const deletePost = await Post.findByIdAndDelete(userId)
+res.status(200).json(deletePost);
+console.log(deletePost,"delete")
+  }catch(err){
+    res.status(404).json({ message: err.message });
+  }
+}
+
+
+
 
 
 // Update like post

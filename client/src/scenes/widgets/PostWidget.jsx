@@ -4,15 +4,17 @@ import {
     FavoriteOutlined,
     ShareOutlined,
   } from "@mui/icons-material";
-  import { Box, Divider, IconButton, Typography, useTheme } from "@mui/material";
+  import { Box, Button, Divider, IconButton, Typography, useTheme } from "@mui/material";
   import FlexBetween from "../../components/FlexBetween" ;
   import Friend from "../../components/Friend";
   import WidgetWrapper from "../../components/WidgetWrapper";
   import { useState } from "react";
   import { useDispatch, useSelector } from "react-redux";
-  import { setPost } from "../../state/index";
+  import DeleteIcon from '@mui/icons-material/Delete';
+  import { setPost,setDeleted } from "../../state/index";
   
   const PostWidget = ({
+ 
     postId,
     postUserId,
     name,
@@ -22,6 +24,7 @@ import {
     userPicturePath,
     likes,
     comments,
+    id
   }) => {
     const [isComments, setIsComments] = useState(false);
     const dispatch = useDispatch();
@@ -35,18 +38,49 @@ import {
     const primary = palette.primary.main;
   
     const patchLike = async () => {
-      const response = await fetch(`http://localhost:3001/posts/${postId}/like`, {
-        method: "PATCH",
-        headers: {
-          Authorization: `Bearer ${token}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ userId: loggedInUserId }),
-      });
-      
-      const updatedPost = await response.json();
-      dispatch(setPost({ post: updatedPost }));
+      try{
+        const response = await fetch(`http://localhost:3001/posts/${postId}/like`, {
+          method: "PATCH",
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId: loggedInUserId }),
+        });
+        
+        const updatedPost = await response.json();
+        dispatch(setPost({ post: updatedPost }));
+      }catch(err){
+console.log(err)
+      }
+    
+     
     };
+
+
+
+    const DeletePost = async () => {
+      try{
+
+        const response = await fetch(`http://localhost:3001/posts/${postId}`, {
+          method: "DELETE",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          
+          },
+         
+        });
+        
+        const deletedData = await  response.json()
+    dispatch(setDeleted({deleted:deletedData}))
+
+      }catch(err){
+        console.log(err)
+      }
+ 
+    };
+
+
     console.log(isLiked,"loguer")
     return (
       <WidgetWrapper m="2rem 0">
@@ -55,7 +89,19 @@ import {
           name={name}
           subtitle={location}
           userPicturePath={userPicturePath}
+         
         />
+
+     <Box sx={{display:"flex",alignItems:"right" ,justifyContent:"right"}}>
+     {id === postUserId ?
+      
+      <IconButton onClick={DeletePost}>
+        <DeleteIcon/>
+      </IconButton>
+      : "" }
+      </Box>   
+
+        
         <Typography color={main} sx={{ mt: "1rem" }}>
           {description}
         </Typography>

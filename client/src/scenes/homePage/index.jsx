@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Box, useMediaQuery } from "@mui/material"
 import Navbar from "../navbar/index"
 import { useSelector } from "react-redux";
@@ -7,10 +8,19 @@ import PostsWidget from "../../scenes/widgets/PostsWidget";
 import FriendListWidget from "../../scenes/widgets/FriendListWidget";
 import AdvertWidget from "../../scenes/widgets/AdvertWidget";
 
-const HomePage = ()=>{
 
+const HomePage = ()=>{ 
+  const [user, setUser] = useState(null);
   const isNonMobileScreens = useMediaQuery("(min-width:1000px)");
-  const { _id, picturePath } = useSelector((state) => state.user);
+  const token = useSelector((state) => state.token);
+  const { _id} = useSelector((state) => state.user);
+
+
+
+
+
+
+
 
 
 
@@ -25,13 +35,13 @@ const HomePage = ()=>{
         justifyContent="space-between"
       >
         <Box flexBasis={isNonMobileScreens ? "26%" : undefined}>
-          <UserWidget userId={_id} picturePath={picturePath} />
+          <UserWidget userId={_id}  />
         </Box>
         <Box
           flexBasis={isNonMobileScreens ? "42%" : undefined}
-          mt={isNonMobileScreens ? undefined : "2rem"}
+          mt={isNonMobileScreens ? "-1.7rem" : "2rem"}
         >
-          <MyPostWidget picturePath={picturePath} />
+          {/* <MyPostWidget picturePath={picturePath} /> */}
           <PostsWidget userId={_id} />
         </Box>
         {isNonMobileScreens && (

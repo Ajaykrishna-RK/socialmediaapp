@@ -1,4 +1,5 @@
 import { useState } from "react";
+
 import {
   Box,
   Button,
@@ -15,6 +16,7 @@ import { useDispatch } from "react-redux";
 import { setLogin } from "../../state/index";
 import Dropzone from "react-dropzone";
 import FlexBetween from "../../components/FlexBetween";
+
 
 const registerSchema = yup.object().shape({
   firstName: yup.string().required("required"),
@@ -54,6 +56,8 @@ const Form = () => {
   const isNonMobile = useMediaQuery("(min-width:600px)");
   const isLogin = pageType === "login";
   const isRegister = pageType === "register";
+ const [loginErr,setLoginErr] = useState(null)
+
 
   const register = async (values, onSubmitProps) => {
     // this allows us to send form info with image
@@ -79,23 +83,38 @@ const Form = () => {
   };
 
   const login = async (values, onSubmitProps) => {
-    const loggedInResponse = await fetch("http://localhost:3001/auth/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(values),
-    });
-    const loggedIn = await loggedInResponse.json();
-    console.log(loggedIn,"login")
-    onSubmitProps.resetForm();
-    if (loggedIn) {
-      dispatch(
-        setLogin({
-          user: loggedIn.user,
-          token: loggedIn.token,
-        })
-      );
-      navigate("/home");
+    try{
+      const loggedInResponse = await fetch("http://localhost:3001/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+
+      if (loggedInResponse.status === 400) {
+        const errorResponse = await loggedInResponse.json();
+    setLoginErr(errorResponse.message)
+   
+        return;
+      }
+      const loggedIn = await loggedInResponse.json();
+      console.log(loggedInResponse.status,"login")
+      onSubmitProps.resetForm();
+      if (loggedIn) {
+        dispatch(
+          setLogin({
+            user: loggedIn.user,
+            token: loggedIn.token,
+          })
+        );
+        navigate("/home");
+      }
+      if(!loggedIn){
+        alert("login error")
+      }
+    }catch(err){
+    
     }
+   
   };
 
  
@@ -127,6 +146,7 @@ const Form = () => {
             gap="30px"
             gridTemplateColumns="repeat(4, minmax(0, 1fr))"
             sx={{
+           
               "& > div": { gridColumn: isNonMobile ? undefined : "span 4" },
             }}
           >
@@ -144,6 +164,7 @@ const Form = () => {
                   helperText={touched.firstName && errors.firstName}
                   sx={{ gridColumn: "span 2" }}
                 />
+            
                 <TextField
                   label="Last Name"
                   onBlur={handleBlur}
@@ -222,6 +243,7 @@ const Form = () => {
               helperText={touched.email && errors.email}
               sx={{ gridColumn: "span 4" }}
             />
+                {loginErr? <Typography sx={{color:"red"}}>{loginErr}</Typography>:""}
             <TextField
               label="Password"
               type="password"

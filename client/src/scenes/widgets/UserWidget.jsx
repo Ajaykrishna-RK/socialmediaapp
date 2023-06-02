@@ -4,7 +4,7 @@ import {
     LocationOnOutlined,
     WorkOutlineOutlined,
 } from "@mui/icons-material"
-import {Box,Typography ,Divider,useTheme} from "@mui/material"
+import {Box,Typography ,Divider,useTheme, IconButton} from "@mui/material"
 import UserImage from "../../components/UserImage"
 import FlexBetween from "../../components/FlexBetween"
 import WidgetWrapper from "../../components/WidgetWrapper"
@@ -12,7 +12,7 @@ import { useSelector } from "react-redux"
 import { useEffect,useState } from "react"
 import { useNavigate } from "react-router-dom"
 
-const UserWidget = ({userId,picturePath})=>{
+const UserWidget = ({userId})=>{
 const [userData ,setUserData] = useState(null)
     const {palette} = useTheme()
     const navigate = useNavigate()
@@ -23,12 +23,17 @@ const medium = palette.neutral.medium
 const main = palette.neutral.main
 
 const getUser = async () => {
-  const response = await fetch(`http://localhost:3001/users/${userId}`, {
-    method: "GET",
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  const data = await response.json();
-setUserData(data)
+  try{
+    const response = await fetch(`http://localhost:3001/users/${userId}`, {
+      method: "GET",
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    const data = await response.json();
+  setUserData(data)
+  }catch(err){
+    console.log(err)
+  }
+
 };
 
 useEffect(() => {
@@ -42,7 +47,7 @@ useEffect(() => {
 if(!userData){
     return null
 }
-const {firstName,lastName,location,occupation,viewedProfile,impressions,friends} = userData
+const {firstName,lastName,location,occupation,viewedProfile,impressions,friends,picturePath} = userData
 
 return(
     <WidgetWrapper>
@@ -68,12 +73,21 @@ return(
             >
               {firstName} {lastName}
             </Typography>
-            <Typography color={medium}>{friends.length} friends</Typography>
+            <Typography color={medium}>{friends?.length} friends</Typography>
           </Box>
         </FlexBetween>
-        <ManageAccountsOutlined />
+    
+        
       </FlexBetween>
+      <div style={{display:'flex',alignItems:"right",justifyContent:"right",marginTop:"-2rem"}}>
 
+      <IconButton onClick={()=>navigate(`/profile/${userId}/user`)} >
+        <ManageAccountsOutlined sx={{fontSize:"25px"}}/>
+        </IconButton>
+
+      </div>
+
+    
       <Divider />
 
       {/* SECOND ROW */}

@@ -24,8 +24,10 @@ import {
   import { useState } from "react";
   import { useDispatch, useSelector } from "react-redux";
   import { setPosts } from "../../state/index";
+import { useNavigate } from "react-router-dom";
   
   const MyPostWidget = ({ picturePath }) => {
+    const navigate = useNavigate()
     const dispatch = useDispatch();
     const [isImage, setIsImage] = useState(false);
     const [image, setImage] = useState(null);
@@ -38,7 +40,10 @@ import {
     const medium = palette.neutral.medium;
   
     const handlePost = async () => {
-      const formData = new FormData();
+
+try{
+
+  const formData = new FormData();
       formData.append("userId", _id);
       formData.append("description", post);
       if (image) {
@@ -53,8 +58,16 @@ import {
       });
       const posts = await response.json();
       dispatch(setPosts({ posts }));
+    
       setImage(null);
       setPost("");
+      navigate("/home")
+
+}catch(err){
+console.log(err)
+}
+
+    
     };
   
     return (

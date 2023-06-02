@@ -9,9 +9,10 @@ import morgan from "morgan";
 import path from "path"
 import { fileURLToPath } from "url";
 import authRoutes from "./routes/auth.js"
-import { Register } from "./controllers/Auth.js";
+import {  Register, updateUser } from "./controllers/Auth.js";
 import userRoutes from "./routes/users.js"
 import postRoutes from "./routes/posts.js"
+import adminRoutes from "./routes/admin.js"
 import {createPost} from "./controllers/posts.js"
 import { verifyToken } from "./middleware/auth.js";
 import Post from "./model/PostModel.js";
@@ -51,11 +52,17 @@ const upload = multer({storage})
 
 
 // register Route With files
+
 app.post("/auth/register",upload.single("picture"),Register)
+app.patch("/auth/register/:userId",verifyToken,upload.single("picture"),updateUser)
 app.post("/posts",verifyToken, upload.single("picture"),createPost)
 
+// Admin
+
+app.use("/admin",adminRoutes)
 // ROUTES
 app.use("/auth",authRoutes)
+
 
 // user routes
 

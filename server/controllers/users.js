@@ -65,3 +65,22 @@ export const addRemoveFriend = async (req, res) => {
     res.status(404).json({ message: err.message });
   }
 };
+
+
+// Search Users 
+
+export const SearchUser = async(req,res) =>{
+try{
+  let data = await UUser.find({
+    "$or":[
+      {firstName:{$regex:req.params.key}}
+    ]
+  })
+
+  res.status(200).json(data);
+
+}catch(err){
+  res.status(404).json({ message: err.message });
+}
+
+}
