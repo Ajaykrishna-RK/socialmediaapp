@@ -1,5 +1,5 @@
 import express from "express"
-import {deletePost, getFeedPosts , getUserPosts,likePost} from "../controllers/posts.js"
+import {Comments, DeleteComments, deletePost, getFeedPosts , getUserPosts,likePost} from "../controllers/posts.js"
 import { verifyToken } from "../middleware/auth.js"
 
 
@@ -16,6 +16,10 @@ router.delete("/:userId",verifyToken,deletePost)
 // update like posts
 
 router.patch("/:id/like",verifyToken,likePost)
+
+router.post('/:postId/comments/',verifyToken,Comments)
+
+router.delete('/:postId/comments/:commentId',verifyToken,DeleteComments)
 
 
 export default router

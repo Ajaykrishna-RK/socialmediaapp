@@ -146,9 +146,9 @@ const Navbar = () => {
                 <LightMode sx={{ color: dark, fontSize: "25px" }} />
               )}
             </IconButton>
-            <Message sx={{ fontSize: "25px" }} />
+            {/* <Message sx={{ fontSize: "25px" }} />
             <Notifications sx={{ fontSize: "25px" }} />
-            <Help sx={{ fontSize: "25px" }} />
+            <Help sx={{ fontSize: "25px" }} /> */}
             <FormControl variant="standard" value="hai">
               <Select
                 value={fullname}
@@ -177,11 +177,14 @@ const Navbar = () => {
             </FormControl>
           </FlexBetween>
         ) : (
-          <IconButton
-            onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
-          >
-            <Menu />
-          </IconButton>
+          <div>
+   {!isMobileMenuToggled && <IconButton
+          onClick={() => setIsMobileMenuToggled(true)}
+        >
+          <Menu />
+        </IconButton> }
+          </div>
+       
         )}
         {/* mobile menu */}
 
@@ -199,7 +202,7 @@ const Navbar = () => {
             {/* Close Icon */}
             <Box display="flex" justifyContent="flex-end" p="1rem">
               <IconButton
-                onClick={() => setIsMobileMenuToggled(!isMobileMenuToggled)}
+                onClick={() => setIsMobileMenuToggled(false)}
               >
                 <Close />
               </IconButton>
@@ -221,9 +224,7 @@ const Navbar = () => {
                   <LightMode sx={{ color: dark, fontSize: "25px" }} />
                 )}
               </IconButton>
-              <Message sx={{ fontSize: "25px" }} />
-              <Notifications sx={{ fontSize: "25px" }} />
-              <Help sx={{ fontSize: "25px" }} />
+        
               <FormControl variant="standard" value="hai">
                 <Select
                   value="hello"

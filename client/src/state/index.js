@@ -1,11 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-
-
-
-
-
-
 const initialState = {
   mode: "light",
   user: null,
@@ -16,8 +10,6 @@ const initialState = {
   searchPost: [],
   getUser: {},
 };
-
-
 
 export const authSlice = createSlice({
   name: "auth",
@@ -61,6 +53,20 @@ export const authSlice = createSlice({
       });
       state.posts = updatePosts;
     },
+    setComments: (state, action) => {
+      const commentPosts = state.posts.map((post) => {
+   
+        if (post._id === action.payload.comments._id) return action.payload.comments;
+        return post;
+      });
+     state.posts = commentPosts
+    },
+  deleteCommentAction: (state, action) => {
+
+
+    
+  },
+
     setDeleted: (state, action) => {
       const deletedId = action.payload.deleted._id;
       if (deletedId) {
@@ -87,6 +93,8 @@ export const {
   setLogOut,
   setFriends,
   setLogin,
+  setComments,
+  deleteCommentAction,
   setPost,
   setPosts,
   setDeleted,

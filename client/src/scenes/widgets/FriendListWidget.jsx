@@ -44,7 +44,7 @@ console.log(err)
         Friend List
       </Typography>
       <Box display="flex" flexDirection="column" gap="1.5rem">
-        {friends &&  friends.map((friend) => (
+      { (Array.isArray(friends))  &&   friends.map((friend) => (
           <Friend
             key={friend._id}
             friendId={friend._id}

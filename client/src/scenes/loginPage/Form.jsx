@@ -76,6 +76,7 @@ const Form = () => {
     );
     const savedUser = await savedUserResponse.json();
     onSubmitProps.resetForm();
+    console.log(savedUser,'save')
 
     if (savedUser) {
       setPageType("login");
@@ -206,10 +207,13 @@ const Form = () => {
                   <Dropzone
                     acceptedFiles=".jpg,.jpeg,.png"
                     multiple={false}
-                    onDrop={(acceptedFiles) =>
+                    onDrop={(acceptedFiles) =>{
                       setFieldValue("picture", acceptedFiles[0])
+                      console.log(acceptedFiles,"filed")
+                    }
                     }
                   >
+                    
                     {({ getRootProps, getInputProps }) => (
                       <Box
                         {...getRootProps()}
@@ -243,7 +247,7 @@ const Form = () => {
               helperText={touched.email && errors.email}
               sx={{ gridColumn: "span 4" }}
             />
-                {loginErr? <Typography sx={{color:"red"}}>{loginErr}</Typography>:""}
+                {loginErr ? <Typography sx={{color:"red"}}>{loginErr}</Typography>:""}
             <TextField
               label="Password"
               type="password"

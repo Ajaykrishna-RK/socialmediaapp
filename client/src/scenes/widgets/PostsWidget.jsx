@@ -9,22 +9,20 @@ const PostsWidget = ({ userId, isProfile = false, id }) => {
   const token = useSelector((state) => state.token);
 
   const getPosts = async () => {
-try{
-  const response = await fetch("http://localhost:3001/posts", {
-    method: "GET",
-    headers: { Authorization: `Bearer ${token}` },
-  });
-  const data = await response.json();
-  dispatch(setPosts({ posts: data }));
-}catch(err){
-console.log(err)
-}
-
-    
+    try {
+      const response = await fetch("http://localhost:3001/posts", {
+        method: "GET",
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = await response.json();
+      dispatch(setPosts({ posts: data }));
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   const getUserPosts = async () => {
-    try{
+    try {
       const response = await fetch(
         `http://localhost:3001/posts/${userId}/posts`,
         {
@@ -34,10 +32,9 @@ console.log(err)
       );
       const data = await response.json();
       dispatch(setPosts({ posts: data }));
-    }catch(err){
-console.log(err)
+    } catch (err) {
+      console.log(err);
     }
- 
   };
 
   useEffect(() => {
@@ -46,42 +43,47 @@ console.log(err)
     } else {
       getPosts();
     }
-  }, [isProfile]); 
+  }, [isProfile]);
+console.log(posts,"==")
 
-  return (
-    <>
-      {posts.map(
-        ({
-          _id,
-          userId,
-          firstName,
-          lastName,
-          description,
-          location,
-          picturePath,
-          userPicturePath,
-          likes,
-          comments,
-          
-        }) => (
-          <PostWidget
-            key={_id}
-            postId={_id}
-            postUserId={userId}
-            name={`${firstName} ${lastName}`}
-            description={description}
-            location={location}
-            picturePath={picturePath}
-            userPicturePath={userPicturePath}
-            likes={likes}
-            comments={comments}
-            id={id}
-            
-          />
-        )
-      )}
-    </>
-  );
+  if (Array.isArray(posts))
+    return (
+      <>
+    {posts &&    
+    
+    posts.map(
+      ({
+        _id,
+        userId,
+        firstName,
+        lastName,
+        description,
+        location,
+        picturePath,
+        userPicturePath,
+        likes,
+        comments,
+      }) => (
+        <PostWidget
+          key={_id}
+          postId={_id}
+          postUserId={userId}
+          name={`${firstName} ${lastName}`}
+          description={description}
+          location={location}
+          picturePath={picturePath}
+          userPicturePath={userPicturePath}
+          likes={likes}
+          comments={comments}
+          id={id}
+        />
+      )
+    )}
+    
+    
+       
+      </>
+    );
 };
 
 export default PostsWidget;
