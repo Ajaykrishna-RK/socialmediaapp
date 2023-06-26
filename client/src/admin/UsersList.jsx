@@ -1,5 +1,6 @@
 import {
   Box,
+  Button,
   Table,
   TableBody,
   TableCell,
@@ -29,22 +30,37 @@ function UsersList() {
     createData("Gingerbread", 356, 16.0, 49, 3.9),
   ];
   const [userDetails, setUserDetails] = useState();
+  const [userLength, setUserLength] = useState();
+  const [paginationCount,setPaginationCount] = useState(0)
+  console.log(paginationCount,'=')
 
   const fetchAllusers = async () => {
-    const response = await fetch("http://localhost:3001/admin/users/", {
+    const response = await fetch(`http://localhost:3001/admin/users?p=${paginationCount}`, {
       method: "GET",
       headers: { AdminAuth: `Bearer ${adminToken}` },
     });
     const datas = await response.json();
     setUserDetails(datas);
   };
+
+  const fetchUsersLength = async () => {
+    const response = await fetch(`http://localhost:3001/admin/users/length`, {
+      method: "GET",
+      headers: { AdminAuth: `Bearer ${adminToken}` },
+    });
+    const datas = await response.json();
+    setUserLength(datas);
+  };
+
   useEffect(() => {
+    fetchUsersLength()
     fetchAllusers();
-  }, []);
+  }, [paginationCount]);
 
   return (
     <div>
       <Box m={3}>
+      <h3 style={{textAlign:"end"}}> <span style={{fontWeight:"lighter"}}>Number of Users :</span>  {userLength}</h3>
         <TableContainer component={Paper}>
           <Table sx={{ minWidth: 650 }} aria-label="simple table">
             <TableHead>
@@ -74,6 +90,11 @@ function UsersList() {
             </TableBody>
           </Table>
         </TableContainer>
+        <Box sx={{justifyContent:"end",alignItems:"end",display:"flex"}}>
+        
+     {paginationCount === 0 ? <Button onClick={()=>setPaginationCount(paginationCount  - 1)} disabled>previous</Button> :<Button onClick={()=>setPaginationCount(paginationCount  - 1)}>previous</Button>  }   
+     {userDetails && userDetails.length === 0 ?  <Button onClick={()=>setPaginationCount(paginationCount +1)} disabled>next</Button>:  <Button onClick={()=>setPaginationCount(paginationCount +1)}>next</Button>}     
+        </Box>
       </Box>
     </div>
   );

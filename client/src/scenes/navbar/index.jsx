@@ -113,7 +113,7 @@ const Navbar = () => {
               },
             }}
           >
-            Sociopedia
+            Social Gram
           </Typography>
 
           {isNonMobileScreens && (

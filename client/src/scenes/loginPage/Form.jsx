@@ -25,7 +25,7 @@ const registerSchema = yup.object().shape({
   password: yup.string().required("required"),
   location: yup.string().required("required"),
   occupation: yup.string().required("required"),
-  picture: yup.string().required("required"),
+  picture: yup.string(),
 });
 
 const loginSchema = yup.object().shape({
@@ -68,7 +68,7 @@ const Form = () => {
     formData.append("picturePath", values.picture.name);
 
     const savedUserResponse = await fetch(
-      "http://localhost:3001/auth/register",
+      "https://socialmediaapp-b9e7.onrender.com/auth/register",
       {
         method: "POST",
         body: formData,
@@ -85,7 +85,7 @@ const Form = () => {
 
   const login = async (values, onSubmitProps) => {
     try{
-      const loggedInResponse = await fetch("http://localhost:3001/auth/login", {
+      const loggedInResponse = await fetch("https://socialmediaapp-b9e7.onrender.com/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(values),
@@ -209,7 +209,7 @@ const Form = () => {
                     multiple={false}
                     onDrop={(acceptedFiles) =>{
                       setFieldValue("picture", acceptedFiles[0])
-                      console.log(acceptedFiles,"filed")
+                    
                     }
                     }
                   >

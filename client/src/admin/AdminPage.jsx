@@ -34,7 +34,7 @@ function AdminPage() {
         cursor: "pointer",
       },
     }}>
-  SocieoPedia Admin Page
+  SocialGram Admin Page
     </Typography> 
     <FlexBetween
               backgroundColor={neutralLight}
