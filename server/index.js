@@ -73,16 +73,25 @@ app.use("/posts",postRoutes)
 
 const PORT = process.env.PORT || 6001
 
-mongoose.connect(process.env.MONGO_URL,{
-    useNewUrlParser: true,
-    useUnifiedTopology:true
-}).then(()=>{
-    app.listen(PORT,()=> console.log("Server Started"))
+// mongoose.connect(process.env.MONGO_URL,{
+//     useNewUrlParser: true,
+//     useUnifiedTopology:true
+// }).then(()=>{
+//     app.listen(PORT,()=> console.log("Server Started"))
 
-// Add Data One Time
-// UUser.insertMany(users)
-// Post.insertMany(posts) 
-})
-.catch((err)=>{
-    console.log(err,"error :Data base not connected")
-})
+// // Add Data One Time
+// // UUser.insertMany(users)
+// // Post.insertMany(posts) 
+// })
+// .catch((err)=>{
+//     console.log(err,"error :Data base not connected")
+// })
+
+mongoose
+  .connect(process.env.MONGO_URL)
+  .then(() => {
+    console.log("Connected to database");
+  })
+  .catch((err) => {
+    console.log(err);
+  });
